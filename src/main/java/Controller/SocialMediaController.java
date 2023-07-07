@@ -5,6 +5,10 @@ import io.javalin.http.Context;
 
 import Service.AccountService;
 import Service.MessageService;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import DAO.AccountDAO;
 import DAO.MessageDAO;
 import Model.Account;
@@ -21,6 +25,16 @@ public class SocialMediaController {
      * suite must receive a Javalin object from this method.
      * @return a Javalin app object which defines the behavior of the Javalin controller.
      */
+
+    AccountService accountService;
+    MessageService messageService;
+
+    public SocialMediaController(){
+        this.accountService = new AccountService();
+        this.messageService = new MessageService();
+    }
+
+    
     public Javalin startAPI() {
         Javalin app = Javalin.create();
 
@@ -44,12 +58,39 @@ public class SocialMediaController {
         return app;
     }
 
-    private void registerHandler(Context context){
-        context.json(context, getClass());
+    private void registerHandler(Context context) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(context.body(), Account.class);
+
+        if(account.getUsername() == "" | account.getPassword().length() < 4){
+            context.status(400);
+        }
+        else{
+            Account addedAccount = accountService.register(account);
+            if(addedAccount!=null){
+                context.json(mapper.writeValueAsString(addedAccount));
+                context.status(200);
+            }else{
+                context.status(400);
+            }
+        }
+
+       
+
     }
 
-    private void loginHandler(Context context){
-        context.json(context, getClass());
+    private void loginHandler(Context context) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(context.body(), Account.class);
+        Account loginAccount = accountService.login(account);
+
+        if(loginAccount!=null){
+            context.json(mapper.writeValueAsString(loginAccount));
+            context.status(200);
+        }else{
+            context.status(401);
+        }
     }
 
     private void createMessageHandler(Context context){

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AccountDAO {
 
-    public Account register(Account acc){
+    public Account register(Account account){
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -26,10 +26,26 @@ public class AccountDAO {
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, acc.getUsername());
-            preparedStatement.setString(2, acc.getPassword());
+            preparedStatement.setString(1, account.getUsername());
+            preparedStatement.setString(2, account.getPassword());
             preparedStatement.executeUpdate();
-            return acc;
+
+            //
+            String sql2 = "select * from Account where username = ? and password = ?;";
+
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+            preparedStatement2.setString(1, account.getUsername());
+            preparedStatement2.setString(2, account.getPassword());
+
+            ResultSet rs = preparedStatement2.executeQuery();
+            while(rs.next()){
+                Account registeredAccount = new Account(rs.getInt("account_id"), 
+                    rs.getString("username"), 
+                    rs.getString("password"));
+
+                return registeredAccount;            
+            }  
+            
             
         } catch (SQLException e) {
             // TODO: handle exception
@@ -41,23 +57,32 @@ public class AccountDAO {
 
     }
 
-    public Account login(Account acc){
+    public Account login(Account account){
         Connection connection = ConnectionUtil.getConnection();
 
         try {
-            String sql = "";
+            String sql = "select * from Account where username = ? and password = ?;";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.executeUpdate();
-            return acc;
+            preparedStatement.setString(1, account.getUsername());
+            preparedStatement.setString(2, account.getPassword());
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while(rs.next()){
+                Account loginAccount = new Account(rs.getInt("account_id"), 
+                    rs.getString("username"), 
+                    rs.getString("password"));
+
+                return loginAccount;            
+            }            
             
         } catch (SQLException e) {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
         
-
         return null;
     }
 

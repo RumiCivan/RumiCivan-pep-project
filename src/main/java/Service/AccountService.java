@@ -19,11 +19,21 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
-    public Account register(){
+    public Account register(Account account){
 
+        // check if acc exist already
+        if(accountDAO.login(account) == null){
+            return accountDAO.register(account);
+        }
         
 
         return null;
+    }
+
+    public Account login(Account account) {       
+        
+        return accountDAO.login(account);
+
     }
 
 
