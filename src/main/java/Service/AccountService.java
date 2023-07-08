@@ -36,6 +36,10 @@ public class AccountService {
 
     }
 
+    public boolean getUserById(int id){
+        return accountDAO.getUserById(id);
+    }
+
 
 
 

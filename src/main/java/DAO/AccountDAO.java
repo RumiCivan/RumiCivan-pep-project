@@ -86,5 +86,29 @@ public class AccountDAO {
         return null;
     }
 
+    public boolean getUserById(int id) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "select * from Account where account_id = ?;";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);    
+            
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if(rs.next()){
+                return true;            
+            }            
+            
+        } catch (SQLException e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+        
+        return false;
+    }
+
     
 }

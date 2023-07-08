@@ -93,27 +93,38 @@ public class SocialMediaController {
         }
     }
 
-    private void createMessageHandler(Context context){
-        context.json(context, getClass());
+    private void createMessageHandler(Context context) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+
+        if(message.getMessage_text() != "" & message.getMessage_text().length() < 255 & accountService.getUserById(message.getPosted_by())){
+            Message newMessage = messageService.create(message);
+            context.json(mapper.writeValueAsString(newMessage));
+            context.status(200);
+        }
+        else
+            context.status(400);
+
+        
     }
 
     private void getAllMessageHandler(Context context){
         context.json(context, getClass());
     }
 
-    private void getOneMessageGivenMessageIdHandler(Context context){
+    private void getOneMessageGivenMessageIdHandler(Context context) throws JsonProcessingException{
         context.json(context, getClass());
     }
 
-    private void deleteOneMessageGivenMessageIdHandler(Context context){
+    private void deleteOneMessageGivenMessageIdHandler(Context context) throws JsonProcessingException{
         context.json(context, getClass());
     }
 
-    private void updateMessageGivenMessageIdHandler(Context context){
+    private void updateMessageGivenMessageIdHandler(Context context) throws JsonProcessingException{
         context.json(context, getClass());
     }
 
-    private void getAllMessagesFromUserGivenAccountIdHandler(Context context){
+    private void getAllMessagesFromUserGivenAccountIdHandler(Context context) throws JsonProcessingException{
         context.json(context, getClass());
     }
 
