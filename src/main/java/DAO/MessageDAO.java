@@ -48,7 +48,7 @@ public class MessageDAO {
             
         } catch (SQLException e) {
             // TODO: handle exception
-            System.out.println(e.getMessage())
+            System.out.println(e.getMessage());
         }
         
         return null;
@@ -80,7 +80,7 @@ public class MessageDAO {
 
         } catch (SQLException e) {
             // TODO: handle exception
-            System.out.println(e.getMessage())
+            System.out.println(e.getMessage());
 
         }
         
