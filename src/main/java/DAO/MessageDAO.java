@@ -46,8 +46,42 @@ public class MessageDAO {
                 return returnMessage;
             }           
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             // TODO: handle exception
+            System.out.println(e.getMessage())
+        }
+        
+        return null;
+    }
+
+    public List<Message> getAllMessages() {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messagesList = new ArrayList<>();
+
+        try {
+
+            String sql = "select * from Message";
+            java.sql.Statement st = connection.createStatement();
+            
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()){
+                Message message = new Message(
+                    rs.getInt(1), 
+                    rs.getInt(2), 
+                    rs.getString(3), 
+                    rs.getInt(4));
+
+                messagesList.add(message);
+            }
+
+            return messagesList;
+
+
+        } catch (SQLException e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage())
+
         }
         
         return null;
