@@ -86,5 +86,33 @@ public class MessageDAO {
         
         return null;
     }
+
+    public Message getOneMessageGivenMessageId(int id) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "select * from Message where message_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);           
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Message message = new Message(
+                    rs.getInt(1), 
+                    rs.getInt(2), 
+                    rs.getString(3), 
+                    rs.getInt(4));
+
+                return message;
+            }         
+            
+        } catch (SQLException e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }        
+        
+        return null;
+    }
     
 }
