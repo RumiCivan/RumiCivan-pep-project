@@ -6,6 +6,8 @@ import io.javalin.http.Context;
 import Service.AccountService;
 import Service.MessageService;
 
+import static org.mockito.ArgumentMatchers.contains;
+
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -136,7 +138,17 @@ public class SocialMediaController {
     }
 
     private void deleteOneMessageGivenMessageIdHandler(Context context) throws JsonProcessingException{
-        context.json(context, getClass());
+        String id = context.pathParam("message_id");
+        int messageId = Integer.parseInt(id);
+
+        Message message = messageService.deleteOneMessageGivenMessageId(messageId);
+        
+        if(message != null){
+            context.json(message);
+            context.status(200);
+        }
+        else
+            context.status(200);
     }
 
     private void updateMessageGivenMessageIdHandler(Context context) throws JsonProcessingException{

@@ -114,5 +114,40 @@ public class MessageDAO {
         
         return null;
     }
+
+    public Message deleteOneMessageGivenMessageId(int id) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "Select * from Message where message_id = ?";
+            String sql2 = "Delete from Message where message_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+            preparedStatement.setInt(1, id); 
+            preparedStatement2.setInt(1, id);          
+
+            ResultSet rs = preparedStatement.executeQuery();
+            
+
+            while(rs.next()){
+                Message message = new Message(
+                    rs.getInt(1), 
+                    rs.getInt(2), 
+                    rs.getString(3), 
+                    rs.getInt(4));
+
+                    preparedStatement2.executeUpdate();
+
+                return message;
+            }         
+            
+        } catch (SQLException e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }        
+        
+        return null;
+    }
     
 }
