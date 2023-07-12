@@ -38,5 +38,9 @@ public class MessageService {
     public Message deleteOneMessageGivenMessageId(int id) {
         return messageDAO.deleteOneMessageGivenMessageId(id);
     }
+
+    public Message updateMessageGivenMessageId(int id, String text) {
+        return messageDAO.updateMessageGivenMessageId(id, text);
+    }
     
 }

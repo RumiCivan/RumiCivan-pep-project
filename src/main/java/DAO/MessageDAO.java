@@ -149,5 +149,42 @@ public class MessageDAO {
         
         return null;
     }
+
+    public Message updateMessageGivenMessageId(int id, String text) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "update Message set message_text = ? where message_id = ?";
+            String sql2 = "select * from Message where message_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, text); 
+            preparedStatement.setInt(2, id); 
+            preparedStatement.executeUpdate();
+            
+            //
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+            preparedStatement2.setInt(1, id);
+
+            ResultSet rs = preparedStatement2.executeQuery();           
+
+            while(rs.next()){
+                Message updatedMessage = new Message(
+                    rs.getInt(1), 
+                    rs.getInt(2), 
+                    rs.getString(3), 
+                    rs.getInt(4));
+
+                return updatedMessage;
+            }         
+            
+        } catch (SQLException e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }        
+        
+        return null;
+        
+    }
     
 }
