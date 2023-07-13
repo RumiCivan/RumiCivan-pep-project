@@ -1,20 +1,14 @@
 package DAO;
 
-import Service.AccountService;
-import Service.MessageService;
 import DAO.AccountDAO;
-import DAO.MessageDAO;
 import Model.Account;
-import Model.Message;
 import Util.ConnectionUtil;
-import io.javalin.http.Context;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountDAO {
 

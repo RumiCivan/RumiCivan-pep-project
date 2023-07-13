@@ -1,15 +1,9 @@
 package DAO;
 
-import Service.AccountService;
-import Service.MessageService;
-import DAO.AccountDAO;
 import DAO.MessageDAO;
-import Model.Account;
 import Model.Message;
 import Util.ConnectionUtil;
-import io.javalin.http.Context;
 
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -185,6 +179,37 @@ public class MessageDAO {
         
         return null;
         
+    }
+
+    public List<Message> getAllMessagesFromUserGivenAccountId(int accountId) {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messageList = new ArrayList<>();
+
+        try {
+            String sql = "select * from Message where posted_by = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, accountId); 
+
+            ResultSet rs = preparedStatement.executeQuery();           
+
+            while(rs.next()){
+                Message message = new Message(
+                    rs.getInt(1), 
+                    rs.getInt(2), 
+                    rs.getString(3), 
+                    rs.getInt(4));
+
+                messageList.add(message);
+            }   
+            return messageList;      
+            
+        } catch (SQLException e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }        
+        
+        return null;
     }
     
 }

@@ -1,11 +1,8 @@
 package Service;
 
-import Service.AccountService;
 import Service.MessageService;
 import java.util.List;
-import DAO.AccountDAO;
 import DAO.MessageDAO;
-import Model.Account;
 import Model.Message;
 
 public class MessageService {
@@ -41,6 +38,10 @@ public class MessageService {
 
     public Message updateMessageGivenMessageId(int id, String text) {
         return messageDAO.updateMessageGivenMessageId(id, text);
+    }
+
+    public List<Message> getAllMessagesFromUserGivenAccountId(int accountId) {
+        return messageDAO.getAllMessagesFromUserGivenAccountId(accountId);
     }
     
 }

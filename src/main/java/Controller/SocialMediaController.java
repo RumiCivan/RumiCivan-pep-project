@@ -6,15 +6,11 @@ import io.javalin.http.Context;
 import Service.AccountService;
 import Service.MessageService;
 
-import static org.mockito.ArgumentMatchers.contains;
-
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import DAO.AccountDAO;
-import DAO.MessageDAO;
 import Model.Account;
 import Model.Message;
 
@@ -172,8 +168,14 @@ public class SocialMediaController {
     }
 
     private void getAllMessagesFromUserGivenAccountIdHandler(Context context) throws JsonProcessingException{
-        context.json(context, getClass());
-    }
+        String id = context.pathParam("account_id");
 
+        int accountId = Integer.parseInt(id);
+
+        List<Message> messageList = messageService.getAllMessagesFromUserGivenAccountId(accountId);
+
+            context.json(messageList);
+            context.status(200);
+    }
 
 }
